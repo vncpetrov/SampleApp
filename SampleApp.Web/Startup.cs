@@ -15,7 +15,7 @@ namespace SampleApp.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options => 
+            //services.AddDbContext<AppDbContext>(options =>
             //    options.UseSqlServer(
             //        this.Configuration.GetConnectionString("DefaultConnection")));
 
