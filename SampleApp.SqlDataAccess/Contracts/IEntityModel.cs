@@ -4,6 +4,6 @@
 
     public interface IEntityModel
     {
-        int Id { get; }
+        Guid Id { get; }
     }
 } 

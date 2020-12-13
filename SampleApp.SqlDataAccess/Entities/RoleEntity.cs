@@ -2,8 +2,10 @@
 {
     using Contracts;
     using Microsoft.AspNetCore.Identity;
+    using System;
 
-    public class RoleEntity : IdentityRole<int>, IEntityModel
+    public class RoleEntity : IdentityRole<Guid>,
+                              IEntityModel
     {
     }
 } 
