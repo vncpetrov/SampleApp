@@ -6,11 +6,13 @@
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "E-mail")]
+        [Display(Name = "E-mail",
+                 Prompt = "E-mail")]
         public string Email { get; set; }
          
         [Required] 
         [DataType(DataType.Password)]
+        [Display(Prompt = "Password")]
         public string Password { get; set; }
     }
 } 

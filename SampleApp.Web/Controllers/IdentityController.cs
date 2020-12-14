@@ -77,7 +77,7 @@
         public async Task<IActionResult> SignIn(SignInUserRequestModel model)
         {
             UserEntity user = await this.userManager
-                .FindByEmailAsync(model.Email);
+            .FindByEmailAsync(model.Email);
 
             if (user is null)
                 return Unauthorized();
@@ -90,25 +90,34 @@
 
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email, ClaimValueTypes.String),
+                new Claim("UserId", user.Id.ToString(), ClaimValueTypes.String)
             };
 
             ClaimsIdentity identity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            ClaimsPrincipal userPrincipal = new ClaimsPrincipal(identity);
 
-            await this.HttpContext
-                .SignInAsync(
-                    principal,
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        IssuedUtc = DateTime.UtcNow
-                    });
+            await this.HttpContext.SignInAsync(
+                scheme: CookieAuthenticationDefaults.AuthenticationScheme,
+                principal: userPrincipal);
+
+            var x = await this.signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
             return RedirectToAction(
-                controllerName: nameof(HomeController),
+                controllerName: "Home",
+                actionName: nameof(HomeController.Index));
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> SignOut()
+        {
+            await this.HttpContext.SignOutAsync(scheme: CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction(
+                controllerName: "Home",
                 actionName: nameof(HomeController.Index));
         }
     }

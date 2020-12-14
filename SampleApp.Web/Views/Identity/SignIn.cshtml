@@ -1,9 +1,9 @@
-﻿@model SignUpUserRequestModel
-
+﻿@model SignInUserRequestModel
+ 
 <div class="row">
     <div class="mx-auto col-6 mt-5">
         <h1 class="text-center text-uppercase mt-5">TEST APP</h1>
-        <form asp-action="SignUp" class="mt-5"> 
+        <form asp-action="SignIn" class="mt-5"> 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -17,13 +17,8 @@
             </div>
 
             <div class="form-group">
-                <input asp-for="ConfirmPassword" class="form-control mt-4 input-field bg-gray" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
                 <input type="submit"
-                       value="Sign Up"
+                       value="Sign In"
                        class="btn
                               btn-block
                               mt-5

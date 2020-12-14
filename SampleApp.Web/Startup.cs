@@ -2,7 +2,6 @@ namespace SampleApp.Web
 {
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Authorization;
@@ -10,10 +9,8 @@ namespace SampleApp.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.IdentityModel.Tokens;
     using SqlDataAccess;
     using SqlDataAccess.Entities;
-    using System.Text;
     using Utils;
 
     public class Startup
@@ -25,8 +22,9 @@ namespace SampleApp.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddIdentity<UserEntity, RoleEntity>(options =>
@@ -40,43 +38,20 @@ namespace SampleApp.Web
                 })
                 .AddEntityFrameworkStores<AppDbContext>();
 
-
-            //var appSettingsSection = this.Configuration.GetSection("AppSettings");
-            //services.Configure<AppSettings>(appSettingsSection);
-
-            //AppSettings appSettings = appSettingsSection.Get<AppSettings>();
-            //byte[] secret = Encoding.ASCII.GetBytes(appSettings.Secret);
-
             services
                 .AddAuthentication(config =>
                 {
                     config.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     config.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
-                .AddCookie(config =>
-                {
-                    config.LoginPath = "/identity/signin";
-                });
-
-
-            //services
-            //    .AddAuthentication(config =>
-            //    {
-            //        config.DefaultAuthenticateScheme = Cookie.AuthenticationScheme;
-            //        config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    })
-            //    .AddJwtBearer(config =>
-            //    {
-            //        config.RequireHttpsMetadata = false;
-            //        config.SaveToken = true;
-            //        config.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuerSigningKey = true,
-            //            IssuerSigningKey = new SymmetricSecurityKey(secret),
-            //            ValidateIssuer = false,
-            //            ValidateAudience = false
-            //        };
-            //    });
+                .AddCookie(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    config =>
+                    {
+                        config.Cookie.Name = WebConstants.IdentityCookieName;
+                        config.LoginPath = "/identity/signin";
+                        config.Cookie.HttpOnly = true;
+                    });
 
             services.AddAuthorization();
 
@@ -109,7 +84,6 @@ namespace SampleApp.Web
 
             app.UseRouting();
 
-            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 

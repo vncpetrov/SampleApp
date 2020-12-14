@@ -15,7 +15,7 @@
             this.logger = logger;
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public IActionResult Index()
         {
             return View();
