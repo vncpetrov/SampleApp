@@ -1,8 +1,9 @@
 ﻿namespace SampleApp.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using SampleApp.Web.Models;
+    using Models;
     using System.Diagnostics;
 
     public class HomeController : Controller
@@ -14,6 +15,7 @@
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
