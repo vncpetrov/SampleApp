@@ -11,5 +11,23 @@
             : base(options)
         {
         }
+
+        public DbSet<CarEntity> Cars { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder
+                .Entity<CarEntity>()
+                .HasOne(car => car.User)
+                .WithMany()
+                .HasForeignKey(car => car.UserId);
+
+            builder
+                .Entity<CarEntity>()
+                .Property(car => car.Id)
+                .ValueGeneratedNever();
+
+            base.OnModelCreating(builder);
+        }
     }
 }
