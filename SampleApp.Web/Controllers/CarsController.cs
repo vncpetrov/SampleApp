@@ -6,6 +6,7 @@
     using DomainServices.QueryHandlers.Car.GetByUser;
     using Microsoft.AspNetCore.Mvc;
     using Models.Car;
+    using SampleApp.DomainServices.QueryHandlers.Car.GetStatisticsByUser;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -17,12 +18,14 @@
 
         // Queries
         private readonly IQueryHandler<GetCarsByUser, IEnumerable<Car>> getUserCars;
+        private readonly IQueryHandler<GetStatisticsByUser, GetStatisticsByUserOutputModel> getCarStatistincsByUser;
 
         private readonly IUserContext userContext;
 
         public CarsController(
             ICommandHandler<CreateCarCommand> createCar,
             IQueryHandler<GetCarsByUser, IEnumerable<Car>> getUserCars,
+            IQueryHandler<GetStatisticsByUser, GetStatisticsByUserOutputModel> getCarStatistincsByUser,
             IUserContext userContext)
         {
             if (createCar is null)
@@ -31,17 +34,43 @@
             if (getUserCars is null)
                 throw new ArgumentNullException(nameof(getUserCars));
 
+            if (getCarStatistincsByUser is null)
+                throw new ArgumentNullException(nameof(getCarStatistincsByUser));
+             
             if (userContext is null)
                 throw new ArgumentNullException(nameof(userContext));
 
             this.createCar = createCar;
             this.getUserCars = getUserCars;
+            this.getCarStatistincsByUser = getCarStatistincsByUser;
             this.userContext = userContext;
         }
 
+        [HttpGet] 
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserStatistics()
+        {
+            GetStatisticsByUser query = new GetStatisticsByUser()
+            {
+                UserId = this.userContext.GetCurrentUserId()
+            };
+
+            GetStatisticsByUserOutputModel carStatistics = 
+                await this.getCarStatistincsByUser.HandleAsync(query);
+
+            UserCarStatisticsModel model = new UserCarStatisticsModel
+            {
+                AverageCarPrice = carStatistics.AverageCarPrice,
+                PercentageOfNewCars = carStatistics.PercentageOfNewCars,
+                PercentagesByCarColour = carStatistics.PercentagesByCarColour
+            };
+
+            return PartialView("_UserStatistics", model);
         }
 
         [HttpPost]
@@ -59,6 +88,7 @@
             return Ok();
         }
 
+        [HttpGet]
         public async Task<IActionResult> List()
         {
             GetCarsByUser query = new GetCarsByUser()

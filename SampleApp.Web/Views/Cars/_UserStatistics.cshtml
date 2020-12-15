@@ -1,0 +1,39 @@
+﻿@model UserCarStatisticsModel
+
+<div class="row mt-5">
+    <div class="col-3 p-3 bg-gray text-center">
+        <h1 class="display-4 mb-0 font-weight-normal">
+            @Model.PercentageOfNewCars%
+        </h1>
+
+        <div class="text-uppercase font-weight-bold">
+            new cars
+        </div>
+    </div>
+
+    <div class="col-3 bg-gray p-3 ml-auto d-flex flex-row align-items-center">
+        <div class="col-6 ">
+            TODO: Pie Chart
+        </div>
+
+        <div class="col-6 ">
+            <ul class="list-unstyled mb-0">
+                @foreach (var item in Model.PercentagesByCarColour)
+                {
+                    <li>@item.Value% - @item.Key.GetEnumTextRepresentation()</li>
+
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-3 bg-gray p-3 ml-auto text-center">
+        <h1 class="display-4 mb-0 font-weight-normal">
+            $@Model.AverageCarPrice
+        </h1>
+
+        <div class="text-uppercase font-weight-bold">
+            average price
+        </div>
+    </div>
+</div>

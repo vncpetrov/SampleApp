@@ -21,6 +21,7 @@ namespace SampleApp.Web
     using SampleApp.DomainServices.QueryHandlers.Car.GetByUser;
     using System.Collections.Generic;
     using SampleApp.Domain.Models;
+    using SampleApp.DomainServices.QueryHandlers.Car.GetStatisticsByUser;
 
     public class Startup
     {
@@ -124,6 +125,9 @@ namespace SampleApp.Web
         {
             services.AddScoped<IQueryHandler<GetCarsByUser, IEnumerable<Car>>,
                                GetCarsByUserQueryHandler>();
+
+            services.AddScoped<IQueryHandler<GetStatisticsByUser, GetStatisticsByUserOutputModel>,
+                               GetStatisticsByUserQueryHandler>();
         }
 
         private static void AddDataWriters(IServiceCollection services)

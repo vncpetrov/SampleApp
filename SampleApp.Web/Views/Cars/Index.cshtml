@@ -1,40 +1,7 @@
 ﻿@model CreateCarRequestModel
 
-<div class="row mt-5">
-    <div class="col-3 p-3 bg-gray text-center">
-        <h1 class="display-4 mb-0 font-weight-normal">
-            23%
-        </h1>
-
-        <div class="text-uppercase font-weight-bold">
-            new cars
-        </div>
-    </div>
-
-    <div class="col-3 bg-gray p-3 ml-auto d-flex flex-row align-items-center">
-        <div class="col-6 ">
-            TODO: Pie Chart
-        </div>
-
-        <div class="col-6 ">
-            <ul class="list-unstyled mb-0">
-                <li>50% - black</li>
-                <li>30% - red</li>
-                <li>20% - green</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="col-3 bg-gray p-3 ml-auto text-center">
-        <h1 class="display-4 mb-0 font-weight-normal">
-            $1475
-        </h1>
-
-        <div class="text-uppercase font-weight-bold">
-            average price
-        </div>
-    </div>
-</div>
+<section id="user-statistics">
+</section>
 
 <div class="row mt-5">
     <div class="col-12 p-0">
@@ -118,6 +85,19 @@
             });
         }
 
+        function getUserCarStatistics() {
+            $(document).ready(function () {
+                $.ajax({
+                    url: '/Cars/UserStatistics',
+                    data: {},
+                    type: 'GET',
+                    success: function (result) {
+                        $('#user-statistics').html(result);
+                    }
+                })
+            });
+        }
+
         $("#submit-car-form").click(function (e) {
             e.preventDefault();
 
@@ -131,11 +111,13 @@
                 data: formData,
                 complete: function (data) {
                     getUserCarsList();
+                    getUserCarStatistics();
                 }
             });
         });
 
         getUserCarsList();
+        getUserCarStatistics();
     </script>
 
     @await Html.PartialAsync("_ValidationScriptsPartial")
