@@ -7,12 +7,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <input asp-for="Email" class="form-control mt-4 input-field bg-gray" />
+                <input asp-for="Email" class="form-control mt-4 input-field bg-gray rounded-0" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input asp-for="Password" class="form-control mt-4 input-field bg-gray" />
+                <input asp-for="Password" class="form-control mt-4 input-field bg-gray rounded-0" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
@@ -20,7 +20,9 @@
                 <input type="submit"
                        value="Sign In"
                        class="btn
+                              btn-xl
                               btn-block
+                              rounded-0
                               mt-5
                               text-uppercase
                               font-weight-bold

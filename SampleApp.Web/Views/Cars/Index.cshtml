@@ -1,0 +1,99 @@
+﻿@model CreateCarRequestModel
+
+<div class="row mt-5">
+    <div class="col-3 p-3 bg-gray text-center">
+        <h1 class="display-4 mb-0 font-weight-normal">
+            23%
+        </h1>
+
+        <div class="text-uppercase font-weight-bold">
+            new cars
+        </div>
+    </div>
+
+    <div class="col-3 bg-gray p-3 ml-auto d-flex flex-row align-items-center">
+        <div class="col-6 ">
+            TODO: Pie Chart
+        </div>
+
+        <div class="col-6 ">
+            <ul class="list-unstyled mb-0">
+                <li>50% - black</li>
+                <li>30% - red</li>
+                <li>20% - green</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-3 bg-gray p-3 ml-auto text-center">
+        <h1 class="display-4 mb-0 font-weight-normal">
+            $1475
+        </h1>
+
+        <div class="text-uppercase font-weight-bold">
+            average price
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 p-0">
+        <form asp-action="Create" class="">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3 p-0 m-0">
+                    <select asp-for="Condition" class="form-control border-2 bg-gray-light rounded-0" asp-items="Html.GetEnumSelectList<CarCondition>()">
+                        <option selected="selected" hidden disabled value="">CONDITION</option>
+                    </select>
+                    <span asp-validation-for="Condition" class="text-danger"></span> 
+                </div>
+
+                <div class="form-group col-md-3 p-0 m-0">
+                    <select asp-for="Colour" class="form-control border-2 bg-gray-light rounded-0" asp-items="Html.GetEnumSelectList<CarColour>()">
+                        <option selected="selected" hidden disabled value="">COLOUR</option>
+                    </select>
+                    <span asp-validation-for="Colour" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-3 p-0 m-0">
+                    <input asp-for="Price" type="number" min="0" class="form-control border-2 bg-gray-light rounded-0" id="inputAddress2" placeholder="PRICE">
+                    <span asp-validation-for="Price" class="text-danger"></span> 
+                </div>
+
+                <div class="form-group col-md-3 p-0 m-0">
+                    <input type="submit"
+                           value="Add"
+                           class="btn rounded-0 btn-block btn-orange text-uppercase
+              font-weight-bold" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <table class="table table-bordered bg-orange-light table-hover">
+        <thead>
+            <tr class="d-flex"> 
+                <th class="text-center col-4 border-1" scope="col">Condition</th>
+                <th class="text-center col-4 border-1" scope="col">Colour</th>
+                <th class="text-center col-4 border-1" scope="col">Price</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="d-flex">
+                <td class="col-4 border-1">New</td>
+                <td class="col-4 border-1">Black</td>
+                <td class="col-4 border-1">$2000</td>
+            </tr>
+
+            <tr class="d-flex">
+                <td class="col-4 border-1">Second hand</td>
+                <td class="col-4 border-1">Red</td>
+                <td class="col-4 border-1">$1500</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

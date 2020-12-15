@@ -81,11 +81,33 @@ body nav.navbar {
 .btn-orange {
     background-color: #FF5400 !important;
     color: white;
+    border-color: #E65A16; 
+}
+
+.btn-xl {
     min-height: 50px;
+}
+
+
+.bg-orange-light {
+    background-color: #FED7C5;
 }
 
 .bg-gray {
     background-color: #EBEBEB !important;
+}
+
+.bg-gray-light {
+    background-color: #F5F5F5 !important;
+}
+
+.border-2 {
+    border-width: 2px !important;
+    border-color: #a4a4a4;
+}
+
+.border-1 { 
+    border-color: #a4a4a4 !important;
 }
 
 .input-field {

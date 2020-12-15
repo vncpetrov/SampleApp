@@ -9,8 +9,14 @@ namespace SampleApp.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using SampleApp.Domain.Contracts;
+    using SampleApp.DomainServices.CommandHandlers.Car.Create;
+    using SampleApp.Web.Infrastructure;
     using SqlDataAccess;
     using SqlDataAccess.Entities;
+    using System;
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
     using Utils;
 
     public class Startup
@@ -55,12 +61,20 @@ namespace SampleApp.Web
 
             services.AddAuthorization();
 
+            services.AddTransient<IUserContext, AspNetUserContext>();
+            AddDataWriters(services);
+            AddCommandHandlers(services);
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddControllersWithViews(cfg =>
-            {
-                cfg.Filters.Add(new AuthorizeFilter());
-            });
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            services
+                .AddControllersWithViews(cfg =>
+                {
+                    cfg.Filters.Add(new AuthorizeFilter());
+                })
+                .AddRazorRuntimeCompilation(); 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -93,6 +107,51 @@ namespace SampleApp.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static void AddCommandHandlers(IServiceCollection services)
+        {
+            services.RegisterCommandHandler<CreateCarCommandHandler, CreateCarCommand>();
+        }
+
+        private static void AddDataWriters(IServiceCollection services)
+        {
+            var dataWriterTypes = AppDomain
+                .CurrentDomain
+                .GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => t.GetInterfaces().Contains(typeof(IDataWriter)));
+
+            foreach (Type @interface in dataWriterTypes.Where(a => a.IsInterface))
+            {
+                Type implementation = dataWriterTypes
+                    .FirstOrDefault(x => !x.IsInterface
+                                         && x.GetInterfaces().Contains(@interface));
+
+                services.AddScoped(
+                    serviceType: @interface,
+                    implementationType: implementation);
+            }
+        }
+
+        private static void AddDataReaders(IServiceCollection services)
+        {
+            var dataReaderTypes = AppDomain
+                .CurrentDomain
+                .GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => t.GetInterfaces().Contains(typeof(IDataReader)));
+
+            foreach (Type @interface in dataReaderTypes.Where(a => a.IsInterface))
+            {
+                Type implementation = dataReaderTypes
+                    .FirstOrDefault(x => !x.IsInterface
+                                         && x.IsAssignableFrom(@interface));
+
+                services.AddScoped(
+                    serviceType: @interface,
+                    implementationType: implementation);
+            }
         }
     }
 }

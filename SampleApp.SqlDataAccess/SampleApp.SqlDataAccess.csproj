@@ -13,4 +13,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SampleApp.Domain\SampleApp.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataReaders\" />
+  </ItemGroup>
+
 </Project>

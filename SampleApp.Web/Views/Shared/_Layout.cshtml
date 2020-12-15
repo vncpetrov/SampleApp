@@ -34,8 +34,8 @@
                             justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link 
-                                      text-light 
+                            <a class="nav-link
+                                      text-light
                                       text-uppercase
                                       font-weight-bold"
                                asp-area=""
@@ -44,6 +44,21 @@
                                 Home
                             </a>
                         </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link
+                                      text-light
+                                      text-uppercase
+                                      font-weight-bold"
+                                   asp-area=""
+                                   asp-controller="Cars"
+                                   asp-action="Index">
+                                    Cars
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <partial name="_LoginPartial" />
