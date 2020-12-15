@@ -38,7 +38,7 @@
 
 <div class="row mt-5">
     <div class="col-12 p-0">
-        <form asp-action="Create" class="">
+        <form asp-action="Create" id="car-form">
             <div asp-validation-summary="ModelOnly"
                  class="text-danger">
             </div>
@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="form-group col-md-3 p-0 m-0">
-                    <input type="submit"
+                    <input id="submit-car-form" type="submit"
                            value="Add"
                            class="btn rounded-0 btn-block btn-orange text-uppercase font-weight-bold" />
                 </div>
@@ -100,28 +100,43 @@
     </div>
 </div>
 
-<div class="row mt-5">
-    <table class="table table-bordered bg-orange-light table-hover">
-        <thead>
-            <tr class="d-flex">
-                <th class="text-center col-4 border-1" scope="col">Condition</th>
-                <th class="text-center col-4 border-1" scope="col">Colour</th>
-                <th class="text-center col-4 border-1" scope="col">Price</th>
-            </tr>
-        </thead>
+<section id="user-cars">
+</section>
 
-        <tbody>
-            <tr class="d-flex">
-                <td class="col-4 border-1">New</td>
-                <td class="col-4 border-1">Black</td>
-                <td class="col-4 border-1">$2000</td>
-            </tr>
+@section Scripts {
+    <script type="text/javascript">
+        function getUserCarsList() {
+            $(document).ready(function () {
+                $.ajax({
+                    url: '/Cars/List',
+                    data: {},
+                    type: 'GET',
+                    success: function (result) {
+                        $('#user-cars').html(result);
+                    }
+                })
+            });
+        }
 
-            <tr class="d-flex">
-                <td class="col-4 border-1">Second hand</td>
-                <td class="col-4 border-1">Red</td>
-                <td class="col-4 border-1">$1500</td>
-            </tr>
-        </tbody>
-    </table>
-</div> 
+        $("#submit-car-form").click(function (e) {
+            e.preventDefault();
+
+            var formData = $("#car-form").serialize();
+
+            $.ajax({
+                url: "/Cars/Create",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: formData,
+                complete: function (data) {
+                    getUserCarsList();
+                }
+            });
+        });
+
+        getUserCarsList();
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

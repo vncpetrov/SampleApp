@@ -18,6 +18,9 @@ namespace SampleApp.Web
     using System.Linq;
     using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
     using Utils;
+    using SampleApp.DomainServices.QueryHandlers.Car.GetByUser;
+    using System.Collections.Generic;
+    using SampleApp.Domain.Models;
 
     public class Startup
     {
@@ -62,8 +65,11 @@ namespace SampleApp.Web
             services.AddAuthorization();
 
             services.AddTransient<IUserContext, AspNetUserContext>();
+
             AddDataWriters(services);
+            AddDataReaders(services);
             AddCommandHandlers(services);
+            AddQueryHandlers(services);
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -114,6 +120,12 @@ namespace SampleApp.Web
             services.RegisterCommandHandler<CreateCarCommandHandler, CreateCarCommand>();
         }
 
+        private static void AddQueryHandlers(IServiceCollection services)
+        {
+            services.AddScoped<IQueryHandler<GetCarsByUser, IEnumerable<Car>>,
+                               GetCarsByUserQueryHandler>();
+        }
+
         private static void AddDataWriters(IServiceCollection services)
         {
             var dataWriterTypes = AppDomain
@@ -146,7 +158,7 @@ namespace SampleApp.Web
             {
                 Type implementation = dataReaderTypes
                     .FirstOrDefault(x => !x.IsInterface
-                                         && x.IsAssignableFrom(@interface));
+                                         && x.GetInterfaces().Contains(@interface));
 
                 services.AddScoped(
                     serviceType: @interface,

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<CarListingModel>
+
+<div class="row mt-5">
+    <table class="table table-bordered bg-orange-light table-hover">
+        <thead>
+            <tr class="d-flex">
+                <th class="text-center col-4 border-1" scope="col">Condition</th>
+                <th class="text-center col-4 border-1" scope="col">Colour</th>
+                <th class="text-center col-4 border-1" scope="col">Price</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var car in Model)
+            {
+                <tr class="d-flex">
+                    <td class="col-4 border-1">@car.Condition.GetEnumTextRepresentation()</td>
+                    <td class="col-4 border-1">@car.Colour.GetEnumTextRepresentation()</td>
+                    <td class="col-4 border-1">$@car.Price</td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+</div> 

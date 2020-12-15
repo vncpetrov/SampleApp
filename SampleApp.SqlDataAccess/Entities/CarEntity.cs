@@ -10,7 +10,7 @@
 
         public CarEntity(Guid id)
         {
-            if (id != Guid.Empty)
+            if (id == Guid.Empty)
                 throw new ArgumentException(
                     "Empty GUIDs are not allowed.", nameof(id));
 

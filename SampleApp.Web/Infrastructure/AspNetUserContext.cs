@@ -18,6 +18,6 @@
                 this.accessor
                     .HttpContext
                     .User
-                    .FindFirstValue(ClaimTypes.NameIdentifier));
+                    .FindFirstValue("UserId"));
     }
 }
